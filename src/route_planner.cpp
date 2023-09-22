@@ -10,7 +10,13 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 
     // TODO 2: Use the m_Model.FindClosestNode method to find the closest nodes to the starting and ending coordinates.
     // Store the nodes you find in the RoutePlanner's start_node and end_node attributes.
-
+    RouteModel::Node& start_node = model.FindClosestNode(start_x, start_y);
+    RouteModel::Node& end_node = model.FindClosestNode(end_x, end_y);
+    // "this" is a raw pointer that points to the instance of this class
+    // start_node and end_node are additional raw pointers (private to this class)
+    // we assign these pointer to the memory locations of the node references
+    this->start_node = &start_node;
+    this->end_node = &end_node;
 }
 
 
@@ -20,7 +26,9 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 // - Node objects have a distance method to determine the distance to another node.
 
 float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
-
+    auto end_node = this->end_node;
+    // passing a copy to the distance method
+    return node->distance(*end_node);
 }
 
 
@@ -32,7 +40,17 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 // - For each node in current_node.neighbors, add the neighbor to open_list and set the node's visited attribute to true.
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
+    // populates the neighbors vector of Node pointers
+    current_node->FindNeighbors();
 
+    for (auto neighbor : current_node->neighbors) {
+        neighbor->parent = current_node;
+        neighbor->h_value = CalculateHValue(neighbor);
+        neighbor->g_value = neighbor->parent->g_value + 1;
+        // adding unvisited neighbors to the open list
+        this->open_list.emplace_back(neighbor);
+        current_node->visited = true;
+    }
 }
 
 
