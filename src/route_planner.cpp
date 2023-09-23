@@ -53,6 +53,11 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
     }
 }
 
+bool RoutePlanner::Compare(const RouteModel::Node& node_a, const RouteModel::Node& node_b) {
+    auto f_a = node_a.g_value + node_a.h_value;
+    auto f_b = node_b.g_value + node_b.h_value;
+    return f_a > f_b;
+}
 
 // TODO 5: Complete the NextNode method to sort the open list and return the next node.
 // Tips:
@@ -62,7 +67,14 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 // - Return the pointer.
 
 RouteModel::Node *RoutePlanner::NextNode() {
+    std::sort(this->open_list.begin(), this->open_list.end(), Compare);
 
+    // Get the last node because the node with the smallest f value is closest to the goal
+    auto closest = this->open_list.back();
+    // Since we copied the pointer into a separate variable, we remove the original one from the vector of open nodes
+    this->open_list.pop_back();
+
+    return closest;
 }
 
 
