@@ -60,7 +60,7 @@ int main(int argc, const char **argv)
 
     float start_x, start_y, end_x, end_y;
 
-    std::cout << "Enter float values for start_x, start_y, end_x, and end_y: ";
+    std::cout << "Enter float values for start_x, start_y, end_x, and end_y: " << std::endl;
     // TODO: Error handling
     std::cin >> start_x;
     std::cin >> start_y;
