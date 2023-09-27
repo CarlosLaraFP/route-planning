@@ -46,9 +46,5 @@ if( ${CMAKE_SYSTEM_NAME} MATCHES "Linux" )
 endif()
 
 if(MSVC)
-    # Use Multi-threaded Debug DLL (/MDd)
-    #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd")
-    # For release builds, you might use:
-    # set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 	target_compile_options(OSM_A_star_search PUBLIC /D_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING /wd4459)
 endif()
