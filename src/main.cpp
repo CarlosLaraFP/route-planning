@@ -28,6 +28,51 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
     return std::move(contents);
 }
 
+int start_x, start_y, end_x, end_y;
+
+bool validRange(int& input) {
+    return !(input < 0 || input > 100);
+}
+
+void getUserInput() {
+    for (auto i = 1; i <= 4; ++i) {
+        switch (i) {
+        case 1:
+            std::cout << "Please enter start_x coordinate: " << std::endl;
+            std::cin >> start_x;
+            while (!validRange(start_x)) {
+                std::cout << "start_x must be in the range [0, 100]\n Please try again." << std::endl;
+                std::cin >> start_x;
+            }
+            break;
+        case 2:
+            std::cout << "Please enter start_y coordinate: " << std::endl;
+            std::cin >> start_y;
+            while (!validRange(start_y)) {
+                std::cout << "start_y must be in the range [0, 100]\n Please try again." << std::endl;
+                std::cin >> start_y;
+            }
+            break;
+        case 3:
+            std::cout << "Please enter end_x coordinate: " << std::endl;
+            std::cin >> end_x;
+            while (!validRange(end_x)) {
+                std::cout << "end_x must be in the range [0, 100]\n Please try again." << std::endl;
+                std::cin >> end_x;
+            }
+            break;
+        case 4:
+            std::cout << "Please enter end_y coordinate: " << std::endl;
+            std::cin >> end_y;
+            while (!validRange(end_y)) {
+                std::cout << "end_y must be in the range [0, 100]\n Please try again." << std::endl;
+                std::cin >> end_y;
+            }
+            break;
+        }
+    }
+}
+
 int main(int argc, const char **argv)
 {    
     std::string osm_data_file = "";
@@ -53,19 +98,8 @@ int main(int argc, const char **argv)
         if (!data) std::cout << "Failed to read." << std::endl;
         else osm_data = std::move(*data);
     }
-    
-    // TODO 1: Declare floats `start_x`, `start_y`, `end_x`, and `end_y` and get
-    // user input for these values using std::cin. Pass the user input to the
-    // RoutePlanner object below in place of 10, 10, 90, 90.
 
-    float start_x, start_y, end_x, end_y;
-
-    std::cout << "Enter float values for start_x, start_y, end_x, and end_y: " << std::endl;
-    // TODO: Error handling
-    std::cin >> start_x;
-    std::cin >> start_y;
-    std::cin >> end_x;
-    std::cin >> end_y;
+    getUserInput();
 
     // Build Model.
     RouteModel model {osm_data};
